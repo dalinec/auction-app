@@ -8,11 +8,8 @@ import {
   primaryKey,
   integer,
 } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 import type { AdapterAccount } from 'next-auth/adapters';
-
-export const bids = pgTable('auction_bids', {
-  id: serial('id').primaryKey(),
-});
 
 export const users = pgTable('auction_user', {
   id: text('id')
@@ -69,3 +66,14 @@ export const verificationTokens = pgTable(
     }),
   })
 );
+
+export const bids = pgTable('auction_bids', {
+  id: serial('id').primaryKey(),
+});
+export const items = pgTable('auction_item', {
+  id: serial('id').primaryKey(),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+});
