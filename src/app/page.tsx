@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { database } from '@/db/database';
 import { bids as bidsSchema } from '@/db/schema';
 
@@ -5,7 +7,7 @@ export default async function HomePage() {
   const bids = await database.query.bids.findMany();
 
   return (
-    <main className='container mx-auto py-12'>
+    <main className='container mx-auto flex flex-col gap-5 py-12'>
       <form
         action={async (formData: FormData) => {
           'use server';
@@ -13,12 +15,14 @@ export default async function HomePage() {
           await database.insert(bidsSchema).values({});
         }}
       >
-        <input
-          name='bid'
-          placeholder='Bid'
-          className='text-black placeholder:text-black'
-        />
-        <button type='submit'>Place Bid</button>
+        <div className='flex flex-col md:flex-row gap-5'>
+          <Input
+            name='bid'
+            placeholder='Bid'
+            className='text-black w-full md:max-w-[450px] placeholder:text-black'
+          />
+          <Button type='submit'>Place Bid</Button>
+        </div>
       </form>
 
       {bids.map((bid, i) => {
