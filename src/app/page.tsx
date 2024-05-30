@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { database } from '@/db/database';
 import { bids as bidsSchema } from '@/db/schema';
+import { revalidatePath } from 'next/cache';
 
 export default async function HomePage() {
   const bids = await database.query.bids.findMany();
@@ -13,6 +14,7 @@ export default async function HomePage() {
           'use server';
           // const bid = formData.get('bid') as string;
           await database.insert(bidsSchema).values({});
+          revalidatePath('/'); //use to refrest to the latest data
         }}
       >
         <div className='flex flex-col md:flex-row gap-5'>
