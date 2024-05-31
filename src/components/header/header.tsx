@@ -21,6 +21,9 @@ export default async function Header() {
           />
           <span className='font-semibold text-xl'>Auction App</span>
         </Link>
+        <Link className='justify-self-start ml-5 flex-1' href={'/items/create'}>
+          <span className='font-semibold text-xl'>Auction an Item</span>
+        </Link>
         <div className='flex items-center justify-center gap-4'>
           <span>{session?.user.name}</span>
           <span>{session ? <SignOut /> : <SignIn />}</span>
