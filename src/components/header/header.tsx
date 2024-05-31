@@ -21,7 +21,10 @@ export default async function Header() {
           />
           <span className='font-semibold text-xl'>Auction App</span>
         </Link>
-        {session ? <SignOut /> : <SignIn />}
+        <div className='flex items-center justify-center gap-4'>
+          <span>{session?.user.name}</span>
+          <span>{session ? <SignOut /> : <SignIn />}</span>
+        </div>
       </div>
     </div>
   );
