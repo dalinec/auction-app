@@ -1,10 +1,6 @@
 import { database } from "@/db/database";
+import { getImageUrl } from "@/utils/files";
 import Image from "next/image";
-
-const getImageUrl = (fileKey: string) => {
-  return `https://pub-2ea83693adf649f5bd25828080ad8a37.r2.dev/${fileKey}
-  `;
-};
 
 export default async function HomePage() {
   const allItems = await database.query.items.findMany();
