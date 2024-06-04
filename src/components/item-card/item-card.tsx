@@ -15,7 +15,7 @@ const ItemCard = ({ item }: { item: Item }) => {
         className="h-auto w-full lg:h-[150px]"
       />
       <div className="flex flex-col">
-        <span>{item.name}</span>
+        <h2 className="text-xl font-bold">{item.name}</h2>
         <span>Starting price: {item.startingPrice / 100} €</span>
       </div>
     </div>

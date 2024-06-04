@@ -1,10 +1,10 @@
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import NextAuth, { DefaultSession } from 'next-auth';
-import Google from 'next-auth/providers/google';
-import { database } from '@/db/database';
-import { accounts, sessions, users, verificationTokens } from '@/db/schema';
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import NextAuth, { DefaultSession } from "next-auth";
+import Google from "next-auth/providers/google";
+import { database } from "@/db/database";
+import { accounts, sessions, users, verificationTokens } from "@/db/schema";
 
-declare module 'next-auth' {
+declare module "next-auth" {
   /**
    * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
@@ -18,7 +18,7 @@ declare module 'next-auth' {
        * with the new ones defined above. To keep the default session user properties,
        * you need to add them back into the newly declared interface.
        */
-    } & DefaultSession['user'];
+    } & DefaultSession["user"];
   }
 }
 
