@@ -8,7 +8,6 @@ import {
   primaryKey,
   integer,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
 import type { AdapterAccount } from "next-auth/adapters";
 
 export const users = pgTable("auction_user", {
