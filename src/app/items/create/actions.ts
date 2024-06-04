@@ -6,7 +6,15 @@ import { items } from "@/db/schema";
 import { redirect } from "next/navigation";
 import { getSignedUrlForS3Object } from "@/lib/s3";
 
-export async function createItemAction(formData: FormData) {
+export async function createItemAction({
+  fileName,
+  name,
+  startingPrice,
+}: {
+  fileName: string;
+  name: string;
+  startingPrice: number;
+}) {
   const session = await auth();
 
   if (!session) {
@@ -19,12 +27,10 @@ export async function createItemAction(formData: FormData) {
     throw new Error("Unauthotized");
   }
 
-  const startingPrice = formData.get("startingPrice") as string;
-  const priceAsCents = Math.floor(parseFloat(startingPrice) * 100);
-
   await database.insert(items).values({
-    name: formData.get("name") as string,
-    startingPrice: priceAsCents,
+    name,
+    startingPrice,
+    fileKey: fileName,
     userId: user.id,
   });
   redirect("/");
