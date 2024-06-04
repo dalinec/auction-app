@@ -79,3 +79,5 @@ export const items = pgTable("auction_item", {
   fileKey: text("fileKey").notNull(),
   startingPrice: integer("startingPrice").notNull().default(0),
 });
+
+export type Item = typeof items.$inferSelect; // create a type based on the schema
