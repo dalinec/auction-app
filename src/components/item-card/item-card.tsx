@@ -2,6 +2,8 @@ import { Item } from "@/db/schema";
 import { getImageUrl } from "@/utils/files";
 import Image from "next/image";
 import React from "react";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 const ItemCard = ({ item }: { item: Item }) => {
   return (
@@ -17,6 +19,9 @@ const ItemCard = ({ item }: { item: Item }) => {
       <div className="flex flex-col">
         <h2 className="text-xl font-bold">{item.name}</h2>
         <span>Starting price: {item.startingPrice / 100} €</span>
+        <Button className="mt-5 w-full place-self-end md:max-w-fit" asChild>
+          <Link href={`/items/${item.id}`}>Place Bid</Link>
+        </Button>
       </div>
     </div>
   );

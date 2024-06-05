@@ -4,6 +4,7 @@ import { database } from "@/db/database";
 import { items } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import EmptyState from "./empty-state";
+import { cn } from "@/lib/utils";
 
 const MyAuctionsPage = async () => {
   const session = await auth();
@@ -16,11 +17,12 @@ const MyAuctionsPage = async () => {
     where: eq(items.userId, session.user.id),
   });
 
+  1812;
   const hasItems = allItems.length > 0;
 
   return (
-    <main className="container mx-auto flex flex-col gap-5 py-12">
-      <h1 className="text-2xl font-bold">Your current Auctions</h1>
+    <main className="flex flex-col gap-5">
+      <h1 className={cn("title")}>Your current Auctions</h1>
       {hasItems ? (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
           {allItems.map((item, i) => {
@@ -33,5 +35,5 @@ const MyAuctionsPage = async () => {
     </main>
   );
 };
-  
+
 export default MyAuctionsPage;

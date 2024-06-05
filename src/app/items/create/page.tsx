@@ -3,11 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createItemAction, createUploadUrlAction } from "./actions";
+import { cn } from "@/lib/utils";
 
 export default function CreatePage() {
   return (
-    <main className="container mx-auto flex flex-col gap-5 py-12">
-      <h1 className="text-4xl font-bold">Post an Item to sell</h1>
+    <main className="flex flex-col gap-5">
+      <h1 className={cn("title")}>Post an Item to sell</h1>
       <form
         className="flex w-full flex-col gap-5 rounded-xl border border-slate-400 p-8 md:max-w-[450px]"
         onSubmit={async (e) => {
