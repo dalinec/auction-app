@@ -69,6 +69,7 @@ export const verificationTokens = pgTable(
 export const bids = pgTable("auction_bids", {
   id: serial("id").primaryKey(),
 });
+
 export const items = pgTable("auction_item", {
   id: serial("id").primaryKey(),
   userId: text("userId")
@@ -77,6 +78,7 @@ export const items = pgTable("auction_item", {
   name: text("name").notNull(),
   fileKey: text("fileKey").notNull(),
   startingPrice: integer("startingPrice").notNull().default(0),
+  bidInterval: integer("bidInterval").notNull().default(100),
 });
 
 export type Item = typeof items.$inferSelect; // create a type based on the schema
