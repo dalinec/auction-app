@@ -19,7 +19,14 @@ const ItemCard = ({ item }: { item: Item }) => {
       />
       <div className="flex flex-col">
         <h2 className="text-xl font-bold">{item.name}</h2>
+        <span>Current Bid: {formatToDolars(item.currentBid)} €</span>
         <span>Starting price: {formatToDolars(item.startingPrice)} €</span>
+        <span>
+          Total price:{" "}
+          {parseInt(formatToDolars(item.startingPrice)) +
+            parseInt(formatToDolars(item.currentBid))}
+          €
+        </span>
         <Button className="mt-5 w-full place-self-end md:max-w-fit" asChild>
           <Link href={`/items/${item.id}`}>Place Bid</Link>
         </Button>

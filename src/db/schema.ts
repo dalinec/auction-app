@@ -1,5 +1,6 @@
 //imported from the auth.js docs
 
+import { relations } from "drizzle-orm";
 import {
   timestamp,
   pgTable,
@@ -66,10 +67,6 @@ export const verificationTokens = pgTable(
   }),
 );
 
-export const bids = pgTable("auction_bids", {
-  id: serial("id").primaryKey(),
-});
-
 export const items = pgTable("auction_item", {
   id: serial("id").primaryKey(),
   userId: text("userId")
@@ -79,6 +76,26 @@ export const items = pgTable("auction_item", {
   fileKey: text("fileKey").notNull(),
   startingPrice: integer("startingPrice").notNull().default(0),
   bidInterval: integer("bidInterval").notNull().default(100),
+  currentBid: integer("currentBid").notNull().default(0),
 });
+
+export const bids = pgTable("auction_bids", {
+  id: serial("id").primaryKey(),
+  amount: integer("amount").notNull(),
+  itemId: serial("itemId")
+    .notNull()
+    .references(() => items.id, { onDelete: "cascade" }),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  timestapmp: timestamp("timestamp", { mode: "date" }).notNull(),
+});
+
+export const userRelations = relations(bids, ({ one }) => ({
+  user: one(users, {
+    fields: [bids.userId],
+    references: [users.id],
+  }),
+}));
 
 export type Item = typeof items.$inferSelect; // create a type based on the schema

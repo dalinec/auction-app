@@ -1,7 +1,7 @@
 import React from "react";
 import { database } from "@/db/database";
-import { items } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { bids, items } from "@/db/schema";
+import { desc, eq } from "drizzle-orm";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import Image from "next/image";
 import { getImageUrl } from "@/utils/files";
 import { formatDistance } from "date-fns";
 import { formatToDolars } from "@/utils/currency";
+import { createBidAction } from "./actions";
 
 const formatTimeStamp = (timestamp: Date) => {
   return formatDistance(timestamp, new Date(), {
@@ -48,30 +49,20 @@ const ItemPage = async ({
     );
   }
 
-  // const bids = [
-  //   {
-  //     id: 1,
-  //     amount: 100,
-  //     userName: "Alice",
-  //     timestamp: new Date(),
-  //   },
-  //   {
-  //     id: 2,
-  //     amount: 500,
-  //     userName: "Dlice",
-  //     timestamp: new Date(),
-  //   },
-  //   {
-  //     id: 3,
-  //     amount: 800,
-  //     userName: "Flice",
-  //     timestamp: new Date(),
-  //   },
-  // ];
+  const allBids = await database.query.bids.findMany({
+    where: eq(bids.itemId, parseInt(itemId)),
+    orderBy: desc(bids.id),
+    with: {
+      user: {
+        columns: {
+          image: true,
+          name: true,
+        },
+      },
+    },
+  });
 
-  const bids = [];
-
-  const hasBids = bids.length > 0;
+  const hasBids = allBids.length > 0;
 
   return (
     <main className="space-y-8">
@@ -107,16 +98,25 @@ const ItemPage = async ({
         </div>
         {/* right */}
         <div className="w-full space-y-12">
-          <h2 className="text-4xl font-bold">Current Bids</h2>
+          <div className="flex w-full items-center justify-between">
+            <h2 className="text-4xl font-bold">Current Bids</h2>
+            {hasBids ? (
+              <form action={createBidAction.bind(null, item.id)}>
+                <Button>Place a Bid</Button>
+              </form>
+            ) : null}
+          </div>
           {hasBids ? (
             <ul className="space-y-4">
-              {bids.map((bid) => (
+              {allBids.map((bid) => (
                 <li className="rounded-xl bg-slate-200 p-8" key={bid.id}>
                   <div>
-                    <span className="font-bold">${bid.amount}</span> by{" "}
-                    <span className="font-bold">{bid.userName}</span>{" "}
+                    <span className="font-bold">
+                      ${formatToDolars(bid.amount)}
+                    </span>{" "}
+                    by <span className="font-bold">{bid.user.name}</span>{" "}
                     <span className="font-normal">
-                      {formatTimeStamp(bid.timestamp)}
+                      {formatTimeStamp(bid.timestapmp)}
                     </span>
                   </div>
                 </li>
@@ -134,7 +134,10 @@ const ItemPage = async ({
                 className="h-full w-full max-w-[450px]"
               />
               <h3 className="text-2xl font-bold"> No bids yet.</h3>
-              <Button>Place a Bid</Button>
+              {/* pass a argument to a promise */}
+              <form action={createBidAction.bind(null, item.id)}>
+                <Button>Place a Bid</Button>
+              </form>
             </div>
           )}
         </div>
