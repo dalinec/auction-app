@@ -1,14 +1,12 @@
-import React from "react";
-import { database } from "@/db/database";
-import { bids, items } from "@/db/schema";
-import { desc, eq } from "drizzle-orm";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import Image from "next/image";
+import { getBidsForItem } from "@/data-access/bids";
+import { getItem } from "@/data-access/items";
+import { cn } from "@/lib/utils";
+import { formatToDolars } from "@/utils/currency";
 import { getImageUrl } from "@/utils/files";
 import { formatDistance } from "date-fns";
-import { formatToDolars } from "@/utils/currency";
+import Image from "next/image";
+import Link from "next/link";
 import { createBidAction } from "./actions";
 
 const formatTimeStamp = (timestamp: Date) => {
@@ -22,9 +20,7 @@ const ItemPage = async ({
 }: {
   params: { itemId: string };
 }) => {
-  const item = await database.query.items.findFirst({
-    where: eq(items.id, parseInt(itemId)),
-  });
+  const item = await getItem(parseInt(itemId));
 
   if (!item) {
     return (
@@ -49,18 +45,7 @@ const ItemPage = async ({
     );
   }
 
-  const allBids = await database.query.bids.findMany({
-    where: eq(bids.itemId, parseInt(itemId)),
-    orderBy: desc(bids.id),
-    with: {
-      user: {
-        columns: {
-          image: true,
-          name: true,
-        },
-      },
-    },
-  });
+  const allBids = await getBidsForItem(item.id);
 
   const hasBids = allBids.length > 0;
 
